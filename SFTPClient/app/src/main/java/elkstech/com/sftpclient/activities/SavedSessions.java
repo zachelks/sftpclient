@@ -12,8 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TableRow;
 
 import com.google.gson.Gson;
 
@@ -96,19 +98,27 @@ public class SavedSessions extends AppCompatActivity implements SavedConnections
         CheckBox keyBasedAuth = findViewById(R.id.keyBasedAuth);
 
         SavedConnection connection = new SavedConnection(connectionName.getText().toString(), hostname.getText().toString(), Integer.parseInt(port.getText().toString()), userName.getText().toString(), password.getText().toString(), keyBasedAuth.isChecked(), null);
-//        Gson gson = new Gson();
-//        String connectionJson = gson.toJson(connection);
-//        File file = new File(getExternalFilesDir(null), "connections.json");
-//        BufferedWriter writer = new BufferedWriter(new FileWriter("connections.json"));
-//        writer.append(connectionJson);
-//        writer.close();
+
         savedConnectionsService.addSavedConnection(connection);
         FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        SavedConnectionsFragment fragment = SavedConnectionsFragment.newInstance();
         transaction.replace(R.id.fragment_frame, this.fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void selectKey(View view) {
+
+    }
+
+    public void onKeyBasedAuthClick(View view) {
+        CheckBox keyBasedAuth = findViewById(R.id.keyBasedAuth);
+        TableRow row = findViewById(R.id.keyOptions);
+        if(keyBasedAuth.isChecked()) {
+            row.setVisibility(View.VISIBLE);
+        } else {
+            row.setVisibility(View.GONE);
+        }
     }
 
     @Override

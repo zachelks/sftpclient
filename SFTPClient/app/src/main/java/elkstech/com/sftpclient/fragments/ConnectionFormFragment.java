@@ -1,5 +1,6 @@
 package elkstech.com.sftpclient.fragments;
 
+import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
@@ -70,7 +71,9 @@ public class ConnectionFormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_connection_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_connection_form, container, false);
+        view.findViewById(R.id.keyPath).setFocusable(false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -92,12 +95,20 @@ public class ConnectionFormFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        /*
+        ActionBar ab = getActivity().getActionBar();
+        ab.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);*/
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this

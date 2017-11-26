@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="0,1,2">
+    android:stretchColumns="0,0,1">
 <TableRow android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
@@ -17,12 +17,20 @@
         android:textColor="#333333" />
 
     <ImageView
-        android:id="@+id/row_click_imageView1"
+        android:id="@+id/editConnection"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="right"
         android:clickable="true"
         android:src="@drawable/ic_edit_black_24dp" />
+
+    <ImageView
+        android:id="@+id/deleteConnection"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:src="@drawable/ic_delete_black_24dp" />
 
 </TableRow>
 </TableLayout>
