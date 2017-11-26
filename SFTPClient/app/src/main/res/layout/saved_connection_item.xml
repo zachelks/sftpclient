@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="0,1,2">
+<TableRow android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/connection_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:padding="10dp"
+        android:text="Install"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#333333" />
+
+    <ImageView
+        android:id="@+id/row_click_imageView1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:src="@drawable/ic_edit_black_24dp" />
+
+</TableRow>
+</TableLayout>

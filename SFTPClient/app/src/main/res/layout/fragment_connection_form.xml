@@ -1,0 +1,84 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/connectionFormFragment"
+    tools:context="elkstech.com.sftpclient.fragments.ConnectionFormFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:text="@string/hello_blank_fragment" />-->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TableRow>
+            <EditText
+                android:id="@+id/connectionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="textNoSuggestions"
+                android:hint="Connection Name"
+                />
+        </TableRow>
+        <TableRow>
+            <EditText
+                android:id="@+id/hostName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="textNoSuggestions"
+                android:hint="Hostname or IP Address"
+                />
+        </TableRow>
+        <TableRow>
+            <EditText
+                android:id="@+id/port"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="5"
+                android:inputType="number"
+                android:hint="Port" />
+        </TableRow>
+        <TableRow>
+            <EditText
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Username" />
+        </TableRow>
+        <TableRow>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/password"
+                android:inputType="textPassword"
+                android:hint="Password"/>
+        </TableRow>
+        <TableRow>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/keyBasedAuth"
+                android:text="Key-based Authentication" />
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/saveConnection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:onClick="saveConnection"
+                android:text="Save Connection" />
+        </TableRow>
+
+    </TableLayout>
+
+
+
+</FrameLayout>
