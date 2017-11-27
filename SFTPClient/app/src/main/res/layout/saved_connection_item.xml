@@ -22,6 +22,7 @@
         android:layout_height="50dp"
         android:layout_gravity="right"
         android:clickable="true"
+        android:onClick="editConnection"
         android:src="@drawable/ic_edit_black_24dp" />
 
     <ImageView

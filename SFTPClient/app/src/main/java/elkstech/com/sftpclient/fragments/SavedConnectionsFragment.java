@@ -1,5 +1,6 @@
 package elkstech.com.sftpclient.fragments;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import elkstech.com.sftpclient.R;
 import elkstech.com.sftpclient.adapters.SavedConnectionAdapter;
+import elkstech.com.sftpclient.dao.AppDatabase;
 import elkstech.com.sftpclient.dummy.DummyContent.DummyItem;
 import elkstech.com.sftpclient.model.SavedConnection;
 import elkstech.com.sftpclient.service.SavedConnectionsService;
@@ -59,8 +61,11 @@ public class SavedConnectionsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.savedConnectionsService = (SavedConnectionsService) getArguments().get("savedConnectionsService");
+            //this.savedConnectionsService = (SavedConnectionsService) getArguments().get("savedConnectionsService");
         }
+        AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
+                AppDatabase.class, "sftp-client").build();
+        this.savedConnectionsService = new SavedConnectionsService(db.savedConnectionsDAO());
     }
 
     @Override
@@ -79,7 +84,7 @@ public class SavedConnectionsFragment extends Fragment {
 //            }
 //            recyclerView.setAdapter(new MySavedConnectionsRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 //        }
-
+        view.findViewById(R.id.fab).setVisibility(View.VISIBLE);
         listView = (ListView) view.findViewById(R.id.savedSessions);
         SavedConnectionAdapter connectionAdapter = new SavedConnectionAdapter(view.getContext(), savedConnectionsService.getSavedConnections());
         listView.setAdapter(connectionAdapter);

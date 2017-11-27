@@ -21,6 +21,9 @@ public interface SavedConnectionsDAO {
     @Query("SELECT * FROM savedconnections")
     List<SavedConnection> getAll();
 
+    @Query("SELECT * FROM savedconnections WHERE connectionName = :connectionName")
+    SavedConnection getSavedConnection(String connectionName);
+
     @Insert
     void insert(SavedConnection connection);
 

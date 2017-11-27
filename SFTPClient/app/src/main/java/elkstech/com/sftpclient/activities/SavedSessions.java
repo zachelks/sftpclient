@@ -1,14 +1,18 @@
 package elkstech.com.sftpclient.activities;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.arch.persistence.room.Room;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +45,8 @@ public class SavedSessions extends AppCompatActivity implements SavedConnections
 
     private SavedConnectionsFragment fragment;
 
+    private static final int PICKFILE_REQUEST_CODE=3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,33 +57,23 @@ public class SavedSessions extends AppCompatActivity implements SavedConnections
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "sftp-client").build();
         this.savedConnectionsService = new SavedConnectionsService(db.savedConnectionsDAO());
-        //this.savedConnectionsService = new SavedConnectionsService();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Fragment connectionForm = ConnectionFormFragment.newInstance("Test", "Test");
                 FragmentTransaction transaction=getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_frame, connectionForm); // give your fragment container id in first parameter
                 transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
                 transaction.commit();
+                findViewById(R.id.fab).setVisibility(View.GONE);
             }
         });
 
-     //   listView = findViewById(R.id.savedSessions);
-
-      //  ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, savedConnectionsService.getSavedConnections());
-       // listView.setAdapter(listAdapter);
-
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("savedConnectionsService", this.savedConnectionsService);
         this.fragment = SavedConnectionsFragment.newInstance();
-        fragment.setArguments(bundle);
         fragmentTransaction.add(R.id.fragment_frame, fragment);
         fragmentTransaction.commit();
     }
@@ -89,6 +85,17 @@ public class SavedSessions extends AppCompatActivity implements SavedConnections
         return true;
     }
 
+    public void editConnection(View view) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        
+        //Bundle bundle = new Bundle();
+        //bundle.put
+        this.fragment = SavedConnectionsFragment.newInstance();
+        fragmentTransaction.add(R.id.fragment_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
     public void saveConnection(View view) throws IOException {
         EditText connectionName = findViewById(R.id.connectionName);
         EditText hostname = findViewById(R.id.hostName);
@@ -96,8 +103,11 @@ public class SavedSessions extends AppCompatActivity implements SavedConnections
         EditText userName = findViewById(R.id.userName);
         EditText password = findViewById(R.id.password);
         CheckBox keyBasedAuth = findViewById(R.id.keyBasedAuth);
+        EditText keyPath = findViewById(R.id.keyPath);
 
-        SavedConnection connection = new SavedConnection(connectionName.getText().toString(), hostname.getText().toString(), Integer.parseInt(port.getText().toString()), userName.getText().toString(), password.getText().toString(), keyBasedAuth.isChecked(), null);
+        SavedConnection connection = new SavedConnection(connectionName.getText().toString(), hostname.getText().toString(),
+                Integer.parseInt(port.getText().toString()), userName.getText().toString(), password.getText().toString(),
+                keyBasedAuth.isChecked(), keyPath.getText().toString());
 
         savedConnectionsService.addSavedConnection(connection);
         FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
@@ -108,15 +118,51 @@ public class SavedSessions extends AppCompatActivity implements SavedConnections
     }
 
     public void selectKey(View view) {
+        Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
+        fileintent.setType("*/*");
+        try {
+            startActivityForResult(fileintent, PICKFILE_REQUEST_CODE);
+        } catch (ActivityNotFoundException e) {
+            Log.e("tag", "No activity can handle picking a file. Showing alternatives.");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+        // response to some other intent, and the code below shouldn't run at all.
+
+        if (requestCode == PICKFILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                EditText text = findViewById(R.id.keyPath);
+                String fileName = uri.getPath();
+                //int cut = fileName.lastIndexOf('/');
+                //fileName = fileName.substring(cut + 1);
+                text.setText(fileName);
+            }
+        }
 
     }
 
     public void onKeyBasedAuthClick(View view) {
         CheckBox keyBasedAuth = findViewById(R.id.keyBasedAuth);
         TableRow row = findViewById(R.id.keyOptions);
+        EditText password = findViewById(R.id.password);
         if(keyBasedAuth.isChecked()) {
+            password.setText("");
+            password.setFocusable(false);
             row.setVisibility(View.VISIBLE);
         } else {
+            password.setFocusable(true);
             row.setVisibility(View.GONE);
         }
     }
